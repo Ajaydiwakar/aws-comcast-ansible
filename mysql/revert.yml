@@ -1,0 +1,68 @@
+--- # MYSQL server installation
+
+- hosts: com
+  user: ansible
+  become: yes
+  tasks:
+          - name: Install WGET
+            yum: 
+                 name: wget 
+                 state: absent
+            
+          - name: Install MySQL-python
+            yum:
+                 name: python3-PyMySQL
+                 state: absent
+          - name: Creates directory
+            file:
+                    path: /usr/mysql
+                    state: directory
+                    mode: 0755
+         
+          - name: Download lib
+            get_url:
+                    url: "https://repo.mysql.com//mysql80-community-release-el8-1.noarch.rpm"
+                    dest: /usr/mysql/
+         
+          - name: Install MYSQL rpm
+            yum: 
+                name: /usr/mysql/mysql80-community-release-el8-1.noarch.rpm 
+                state: absent
+                disable_gpg_check: True
+
+         
+          - name: Update Package
+            yum: 
+                name: mysql-server
+                state: latest 
+              
+         
+          - name: Install MySQL latest community version
+            yum:
+                 name: mysql-server 
+                 state: absent
+         
+          - name: Start MYSQL service
+            service:
+                    name: mysqld 
+                    state: restarted
+         
+          - name: Create database comcast
+            mysql_db: 
+                    name: comcast 
+                    state: absent
+         
+          - name: Create user mysql
+            mysql_user: 
+                    name: comcast 
+                    password: comcast@123 priv=comcast.*:ALL host='%' state=absent
+                    no_log: true
+         
+          - name: Restart mysql
+            service: 
+                    name: mysqld 
+                    state: restarted
+           
+
+       
+

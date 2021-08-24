@@ -1,0 +1,10 @@
+--- # checking vars
+ - hosts: dev
+   user: ansible
+   become: yes
+   connection: ssh
+   vars:
+           pkgname: httpd
+   tasks:
+           - name: installs httpd in dev servers
+             action: yum name='{{pkgname}}' state=present

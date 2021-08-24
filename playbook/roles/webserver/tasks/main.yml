@@ -1,0 +1,2 @@
+- name: install httpd on Redhat
+  action: yum name='{{pkgname}}' state=present
